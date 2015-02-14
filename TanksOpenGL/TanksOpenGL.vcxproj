@@ -66,6 +66,7 @@
   <ItemGroup>
     <ClCompile Include="Box.cpp" />
     <ClCompile Include="Color.cpp" />
+    <ClCompile Include="Cylinder.cpp" />
     <ClCompile Include="DrawableObject.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Plane.cpp" />
@@ -76,6 +77,7 @@
   <ItemGroup>
     <ClInclude Include="Box.h" />
     <ClInclude Include="Color.h" />
+    <ClInclude Include="Cylinder.h" />
     <ClInclude Include="DrawableObject.h" />
     <ClInclude Include="NotImplementedException.h" />
     <ClInclude Include="Plane.h" />

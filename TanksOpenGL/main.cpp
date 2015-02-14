@@ -1,6 +1,10 @@
+#define _USE_MATH_DEFINES
 #include <iostream>
 #include <stdlib.h>
+#include <cmath>
+
 #include <GL\freeglut.h>
+
 #include "Primitives.h"
 
 
@@ -35,18 +39,21 @@ void keyboard(unsigned char key, int x, int y) {
 void reshape(int width, int height) {
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(45.0, width / (double)height, 0.1, 50.0);
+	gluPerspective(45.0, width / (double)height, 0.1, 20.0);
 	//gluLookAt(0, 0, -5, 0, 0, 0, 0, 100, 0);
 	glMatrixMode(GL_MODELVIEW);
 }
 
 void SpinCube(int n) {
 	rotate_x += 1;
-	if(rotate_x > 360)
+	if(rotate_x >= 360)
 		rotate_x -= 360;
 	rotate_y += 1;
-	if(rotate_y > 360)
+	if(rotate_y >= 360)
 		rotate_y -= 360;
+	rotate_z += 1;
+	if(rotate_z >= 360)
+		rotate_z -= 360;
 	glutPostRedisplay();
 	glutTimerFunc(10, SpinCube, n);
 }
@@ -54,21 +61,20 @@ void SpinCube(int n) {
 void display() {
 	//  Clear screen and Z-buffer
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+	
 	// Reset transformations
 	glLoadIdentity();
 
+	primitives::Cylinder tower(3.0, 2.0, 3.0, 7);
+	primitives::Cylinder gun(5.0, 0.5, 0.5, 5);
+	gun.rotationAngle.setZ(90.0);
+	gun.x += 4.8;
+
 	// Main point
-	glTranslatef(0.0, 0.0, -10.0);
-
-	primitives::Box box(3, 2, 1, 1.5);
-	box.rotate(rotate_x, rotate_y, rotate_z);
-	box.draw();
-	box.rotate(-rotate_x, rotate_y, -rotate_z);
-	box.shiftBy(-3, 0, 0);
-	box.draw();
-
+	glTranslatef(0.0, 0.0, -15.0);
+	glRotated(rotate_y, 0.0, 1.0, 0.0);
+	tower.draw();
+	gun.draw();
 	glFlush();
 	glutSwapBuffers();
-
 }

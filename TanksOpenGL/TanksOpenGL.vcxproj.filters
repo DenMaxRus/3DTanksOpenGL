@@ -54,6 +54,9 @@
     <ClCompile Include="Color.cpp">
       <Filter>Файлы исходного кода\BaseObjects</Filter>
     </ClCompile>
+    <ClCompile Include="Cylinder.cpp">
+      <Filter>Файлы исходного кода\Primitives</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SolidColor.h">
@@ -82,6 +85,9 @@
     </ClInclude>
     <ClInclude Include="Color.h">
       <Filter>Заголовочные файлы\BaseObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Cylinder.h">
+      <Filter>Заголовочные файлы\Primitives</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

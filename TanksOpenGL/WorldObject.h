@@ -36,17 +36,17 @@ public:
 	void setY(double);
 	void setZ(double);*/
 	// Get sizes (should be calculated for each child class for more precise)
-	virtual double getWidth() const; // Get width
-	virtual double getLength() const; // Get length
-	virtual double getHeight() const; // Get height
+	virtual const double& getWidth() const; // Get width
+	virtual const double& getLength() const; // Get length
+	virtual const double& getHeight() const; // Get height
 	// Set sizes
 	virtual void setWidth(double); // Set width
 	virtual void setLength(double); // Set length
 	virtual void setHeight(double); // Set height
 	// Get half sizes
-	virtual double getHWidth() const; // Get width/2
-	virtual double getHLength() const; // Get length/2
-	virtual double getHHeight() const; // Get height/2
+	virtual const double& getHWidth() const; // Get width/2
+	virtual const double& getHLength() const; // Get length/2
+	virtual const double& getHHeight() const; // Get height/2
 	// Transformations
 	void rotate(double xAngle, double yAngle, double zAngle); // Simplify rotation by setting rotationAngle x, y, z values
 	void rotateRelative(double xAngleDelta, double yAngleDelta, double zAngleDelta); // Change rotationAngle x, y, z values by relative values

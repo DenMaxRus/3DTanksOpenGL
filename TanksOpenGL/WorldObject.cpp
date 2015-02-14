@@ -26,9 +26,9 @@ double& WorldObject::RotationAngle::getNormalAngle(double &value) const {
 WorldObject::WorldObject(double width, double length, double height, double x, double y, double z) : x(x), y(y), z(z), width(width), length(length), height(height), halfWidth(width/2.0), halfLength(length/2.0), halfHeight(height/2.0), rotationAngle() {}
 WorldObject::~WorldObject() {}
 // Get sizes
-double WorldObject::getWidth() const { return width; }
-double WorldObject::getLength() const { return length; }
-double WorldObject::getHeight() const { return height; }
+const double& WorldObject::getWidth() const { return width; }
+const double& WorldObject::getLength() const { return length; }
+const double& WorldObject::getHeight() const { return height; }
 // Set sizes
 void WorldObject::setWidth(double value)  {
 	if(value > 0.0) {
@@ -52,9 +52,9 @@ void WorldObject::setHeight(double value) {
 		height = halfHeight = 0;
 }
 // Get half sizes
-double WorldObject::getHWidth() const { return halfWidth; }
-double WorldObject::getHLength() const { return halfLength; }
-double WorldObject::getHHeight() const { return halfHeight; }
+const double& WorldObject::getHWidth() const { return halfWidth; }
+const double& WorldObject::getHLength() const { return halfLength; }
+const double& WorldObject::getHHeight() const { return halfHeight; }
 // Transformations
 // Simplify rotation by setting rotationAngle x, y, z values
 void WorldObject::rotate(double x, double y, double z) {

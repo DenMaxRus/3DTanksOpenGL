@@ -6,7 +6,7 @@ primitives::Plane::Plane(double width, double length, double x, double y, double
 
 primitives::Plane::~Plane() {}
 
-void primitives::Plane::draw() {
+void primitives::Plane::draw() const {
 	glPushMatrix();
 	// Transformations
 	glTranslated(x, y, z);

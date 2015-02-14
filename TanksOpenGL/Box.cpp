@@ -6,7 +6,7 @@ primitives::Box::Box(double width, double length, double height, double x, doubl
 
 primitives::Box::~Box() {}
 
-void primitives::Box::draw() {
+void primitives::Box::draw() const {
 	glPushMatrix();
 	// Transformations
 	glTranslated(x, y, z);
