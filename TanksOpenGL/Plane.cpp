@@ -14,12 +14,11 @@ void primitives::Plane::draw() {
 	glRotated(rotationAngle.getY(), 0.0, 1.0, 0.0);
 	glRotated(rotationAngle.getZ(), 0.0, 0.0, 1.0);
 	// Drawing
-	double halfWidth(getWidth() / 2.0), halfLength(getLength() / 2.0); // TODO Make this variables as fields in WorldObject
-	glBegin(GL_POLYGON);
-	glVertex3d(-halfWidth, 0.0, halfLength);
-	glVertex3d(-halfWidth, 0.0, -halfLength);
-	glVertex3d(halfWidth, 0.0, -halfLength);
-	glVertex3d(halfWidth, 0.0, halfLength);
+	glBegin(GL_QUADS);
+	glVertex3d(-getHWidth(), 0.0, getHLength());
+	glVertex3d(-getHWidth(), 0.0, -getHLength());
+	glVertex3d(getHWidth(), 0.0, -getHLength());
+	glVertex3d(getHWidth(), 0.0, getHLength());
 	glEnd();
 
 	glPopMatrix();

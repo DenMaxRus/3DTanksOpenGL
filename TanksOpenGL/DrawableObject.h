@@ -1,6 +1,9 @@
 #pragma once
 #include "WorldObject.h"
 #include "Color.h"
+
+// TODO Implement scaling?
+
 class DrawableObject :
 	public WorldObject {
 public:
@@ -10,4 +13,3 @@ public:
 protected:
 	DrawableObject(double width, double length, double height, double &x, double &y, double &z);
 };
-
