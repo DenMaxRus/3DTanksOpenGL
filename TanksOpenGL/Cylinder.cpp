@@ -4,8 +4,8 @@
 #include "Cylinder.h"
 
 
-primitives::Cylinder::Cylinder(double height, double topRadius, double bottomRadius, int sides, double x, double y, double z)
-	: DrawableObject(0.0, 0.0, height, x, y, z), bottomRadius(bottomRadius), topRadius(topRadius), sides(sides) {}
+primitives::Cylinder::Cylinder(double height, double topRadius, double bottomRadius, int sides, bool renderBottom, bool renderTop, double x, double y, double z)
+	: WorldObject(0.0, 0.0, height, x, y, z), bottomRadius(bottomRadius), topRadius(topRadius), sides(sides), renderBottom(renderBottom), renderTop(renderTop) {}
 
 primitives::Cylinder::~Cylinder() {}
 
@@ -23,19 +23,23 @@ void primitives::Cylinder::draw() const {
 	for(double i(0.0), step(M_PI / sides), angle(step), prevTopX(topRadius), prevBotX(bottomRadius), prevTopY(0.0), prevBotY(0.0); i < sides * 2; angle += step, ++i) {
 		double sinA(sin(angle)), cosA(cos(angle)), topY(topRadius*sinA), topX(topRadius*cosA), botY(bottomRadius*sinA), botX(bottomRadius * cosA);
 		// TOP
-		glBegin(GL_TRIANGLES);
-		glColor3d(sinA, sinA, cosA);
-		glVertex3d(0.0, getHHeight(), 0.0);
-		glVertex3d(topX, getHHeight(), topY);
-		glVertex3d(prevTopX, getHHeight(), prevTopY);
-		glEnd();
+		if(renderTop) {
+			glBegin(GL_TRIANGLES);
+			glColor3d(sinA, sinA, cosA);
+			glVertex3d(0.0, getHHeight(), 0.0);
+			glVertex3d(topX, getHHeight(), topY);
+			glVertex3d(prevTopX, getHHeight(), prevTopY);
+			glEnd();
+		}
 		// BOTTOM
-		glBegin(GL_TRIANGLES);
-		glColor3d(sinA, cosA, cosA);
-		glVertex3d(0.0, -getHHeight(), 0.0);
-		glVertex3d(prevBotX, -getHHeight(), prevBotY);
-		glVertex3d(botX, -getHHeight(), botY);
-		glEnd();
+		if(renderBottom) {
+			glBegin(GL_TRIANGLES);
+			glColor3d(sinA, cosA, cosA);
+			glVertex3d(0.0, -getHHeight(), 0.0);
+			glVertex3d(prevBotX, -getHHeight(), prevBotY);
+			glVertex3d(botX, -getHHeight(), botY);
+			glEnd();
+		}
 		// SIDE
 		glBegin(GL_QUADS);
 		glColor3d(cosA, cosA, sinA);

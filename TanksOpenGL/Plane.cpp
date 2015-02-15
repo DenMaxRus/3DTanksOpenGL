@@ -2,7 +2,7 @@
 #include "NotImplementedException.h"
 #include "Plane.h"
 
-primitives::Plane::Plane(double width, double length, double x, double y, double z) : DrawableObject(width, length, 0.0, x, y, z) {}
+primitives::Plane::Plane(double width, double length, double x, double y, double z) : WorldObject(width, length, 0.0, x, y, z) {}
 
 primitives::Plane::~Plane() {}
 

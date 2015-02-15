@@ -70,9 +70,9 @@ void WorldObject::rotateRelative(double xAngleDelta, double yAngleDelta, double 
 }
 // Change center coordinates
 void WorldObject::moveTo(double x, double y, double z) {
-	x = x;
-	y = y;
-	z = z;
+	this->x = x;
+	this->y = y;
+	this->z = z;
 }
 // Change center coordinates by relative values
 void WorldObject::shiftBy(double xDelta, double yDelta, double zDelta) {
