@@ -48,7 +48,7 @@ public:
 	virtual const double& getHLength() const; // Get length/2
 	virtual const double& getHHeight() const; // Get height/2
 	// Transformations
-	void rotate(double xAngle, double yAngle, double zAngle); // Simplify rotation by setting rotationAngle x, y, z values
+	virtual void rotate(double xAngle, double yAngle, double zAngle); // Simplify rotation by setting rotationAngle x, y, z values
 	void rotateRelative(double xAngleDelta, double yAngleDelta, double zAngleDelta); // Change rotationAngle x, y, z values by relative values
 	void moveTo(double x, double y, double z); // Change center coordinates
 	void shiftBy(double xDelta, double yDelta, double zDelta); // Change center coordinates by relative values

@@ -2,3 +2,4 @@ TanksOpenGL.sdf
 TanksOpenGL.opensdf
 *.log
 *.tlog
+Debug/

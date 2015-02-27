@@ -69,7 +69,7 @@
     <ClCompile Include="Cylinder.cpp" />
     <ClCompile Include="DrawableObject.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="OperatedObject.cpp" />
+    <ClCompile Include="OperatableObject.cpp" />
     <ClCompile Include="Plane.cpp" />
     <ClCompile Include="WorldObject.cpp" />
     <ClCompile Include="SolidColor.cpp" />
@@ -81,7 +81,7 @@
     <ClInclude Include="Cylinder.h" />
     <ClInclude Include="DrawableObject.h" />
     <ClInclude Include="NotImplementedException.h" />
-    <ClInclude Include="OperatedObject.h" />
+    <ClInclude Include="OperatableObject.h" />
     <ClInclude Include="Plane.h" />
     <ClInclude Include="Primitives.h" />
     <ClInclude Include="WorldObject.h" />

@@ -57,7 +57,7 @@
     <ClCompile Include="Cylinder.cpp">
       <Filter>Файлы исходного кода\Primitives</Filter>
     </ClCompile>
-    <ClCompile Include="OperatedObject.cpp">
+    <ClCompile Include="OperatableObject.cpp">
       <Filter>Файлы исходного кода\BaseObjects</Filter>
     </ClCompile>
   </ItemGroup>
@@ -92,7 +92,7 @@
     <ClInclude Include="Cylinder.h">
       <Filter>Заголовочные файлы\Primitives</Filter>
     </ClInclude>
-    <ClInclude Include="OperatedObject.h">
+    <ClInclude Include="OperatableObject.h">
       <Filter>Заголовочные файлы\BaseObjects</Filter>
     </ClInclude>
   </ItemGroup>
