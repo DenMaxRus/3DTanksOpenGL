@@ -9,15 +9,17 @@
 #include "Primitives.h"
 #include "OperatableObject.h"
 
+void mousePassiveMotion(int x, int y);
 void keyPressed(unsigned char key, int x, int y);
 void keyUp(unsigned char key, int x, int y);
 void keysOperations();
 void mainTimer(int);
-void special(int, int, int);
+void specialKeyPressed(int, int, int);
+void specialKeyUp(int, int, int);
 void display(void);
 void SpinCube(int);
 void reshape(int, int);
-bool *keyStates = new bool[256]{false};
+bool *keyStates = new bool[256]{false}, *specialKeyStates = new bool[256]{false};
 GLdouble rotate_x(0.0);
 GLdouble rotate_y(0.0);
 GLdouble rotate_z(0.0);
@@ -27,7 +29,8 @@ primitives::Cylinder gun(3.0, 0.15, 0.15, 5, false, true, 0.0, 0.85, 2.5);
 int acceleration(0);
 double speed(0.0), verticalSpeed(0.0), accelerationValue(0.0), frictionValue(0.30), mass(1.0), heightMap[50][50], engineForce(10.0);
 std::chrono::system_clock::time_point prevTime;
-const double smallG(9.8);
+const double smallG(9.80665);
+int camAngleY(0), camAngleX(0);
 
 int main(int argc, char* argv[]) {
 	gun.rotationAngle.setX(90.0);
@@ -43,14 +46,15 @@ int main(int argc, char* argv[]) {
 	glutInitWindowSize(800, 600);
 	glutCreateWindow("GLUT Test");
 	glViewport(0, 0, 800, 600);
-	glEnable(GL_DEPTH_TEST);
 	glutKeyboardFunc(&keyPressed);
 	glutKeyboardUpFunc(&keyUp);
-	glutSpecialFunc(&special);
+	glutSpecialFunc(&specialKeyPressed);
+	glutSpecialUpFunc(&specialKeyUp);
 	glutDisplayFunc(&display);
 	glutReshapeFunc(&reshape);
 	glutTimerFunc(40, &mainTimer, 0);
 	glEnable(GL_CULL_FACE);
+	glEnable(GL_DEPTH_TEST);
 	prevTime = std::chrono::steady_clock::now();
 	glutMainLoop();
 	return EXIT_SUCCESS;
@@ -78,28 +82,43 @@ void keysOperations() {
 		body.moveTo(0, 0, 0);
 		body.rotate(0, 0, 0);
 	}
+	if(specialKeyStates[GLUT_KEY_UP])
+		camAngleX-=5;
+	else if(specialKeyStates[GLUT_KEY_DOWN])
+		camAngleX+=5;
+	if(specialKeyStates[GLUT_KEY_LEFT])
+		camAngleY-=5;
+	else if(specialKeyStates[GLUT_KEY_RIGHT])
+		camAngleY+=5;
 }
-void special(int key, int x, int y) {
-	switch(key) {
+void specialKeyPressed(int key, int x, int y) {
+	specialKeyStates[key] = true;
+	/*switch(key) {
 		case GLUT_KEY_UP:
+			--camAngleX;
 			//do something here
 			break;
 		case GLUT_KEY_DOWN:
 			//do something here
+			++camAngleY;
 			break;
 		case GLUT_KEY_LEFT:
-
+			--camAngleY;
 			break;
 		case GLUT_KEY_RIGHT:
-
+			++camAngleY;
 			break;
-	}
+	}*/
+}
+void specialKeyUp(int key, int x, int y) {
+	specialKeyStates[key] = false;
 }
 
 void reshape(int width, int height) {
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(90.0, width / (double)height, 0.1, 120.0);
+	gluPerspective(60.0, width / (double)height, 0.1, 120.0);
+	//glFrustum()
 	//gluLookAt(0, 0, -5, 0, 0, 0, 0, 100, 0);
 	glMatrixMode(GL_MODELVIEW);
 }
@@ -118,7 +137,7 @@ void physics(std::chrono::milliseconds &timestep) {
 
 		}
 	}*/
-	std::cout << body.y << std::endl;
+	//std::cout << body.y << std::endl;
 	double timestepSeconds = timestep.count() / 1000.0,
 		sinA(sin(body.rotationAngle.getY() * M_PI / 180.0)),
 		cosA(cos(body.rotationAngle.getY() * M_PI / 180.0)),
@@ -170,34 +189,37 @@ void SpinCube(int n) {
 }
 
 void display() {
-	//  Clear screen and Z-buffer
+	// Clear screen and Z-buffer
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// Reset transformations
 	glLoadIdentity();
-
-	// Main point
-	glTranslatef(0.0, -5.0, -15.0);
-	glRotated(35.0, 1.0, 0.0, 0.0);
+	// Driver camera
+	//glRotated(180.0 - body.rotationAngle.getY(), 0.0, 1.0, 0.0);
+	glRotated(camAngleX, 1.0, 0.0, 0.0);
+	glRotated(camAngleY+180.0, 0.0, 1.0, 0.0);
+	glTranslated(-body.x, -body.y - 1.0, -body.z);
+	// Static camera
+	//glTranslated(0.0, -5.0, -15.0);
+	//glRotated(35.0, 1.0, 0.0, 0.0);
 
 	glColor3d(0.62, 0.85, 0.43);
 	// Draw surface
 	for(int i(0); i < 50; ++i) {
 		for(int j(0); j < 50; ++j) {
-
 			glBegin(GL_QUADS);
 			glVertex3d(j - 25, heightMap[j][i], i - 25);
 			glVertex3d(j - 25, heightMap[j][i + 1], i - 24);
 			glVertex3d(j - 24, heightMap[j + 1][i + 1], i - 24);
 			glVertex3d(j - 24, heightMap[j + 1][i], i - 25);
 			glEnd();
-
 		}
 	}
 
 	body.draw();
 	tower.draw();
 	gun.draw();
+	
 	glFlush();
 	glutSwapBuffers();
 }
