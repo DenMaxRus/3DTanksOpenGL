@@ -65,24 +65,28 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Box.cpp" />
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="Cylinder.cpp" />
     <ClCompile Include="DrawableObject.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="OperatableObject.cpp" />
     <ClCompile Include="Plane.cpp" />
+    <ClCompile Include="Point.cpp" />
     <ClCompile Include="WorldObject.cpp" />
     <ClCompile Include="SolidColor.cpp" />
     <ClCompile Include="Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Box.h" />
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="Cylinder.h" />
     <ClInclude Include="DrawableObject.h" />
     <ClInclude Include="NotImplementedException.h" />
     <ClInclude Include="OperatableObject.h" />
     <ClInclude Include="Plane.h" />
+    <ClInclude Include="Point.h" />
     <ClInclude Include="Primitives.h" />
     <ClInclude Include="WorldObject.h" />
     <ClInclude Include="SolidColor.h" />

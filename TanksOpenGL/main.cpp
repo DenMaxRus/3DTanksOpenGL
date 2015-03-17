@@ -6,10 +6,20 @@
 
 #include <GL\freeglut.h>
 
+#include "Camera.h"
 #include "Primitives.h"
 #include "OperatableObject.h"
 
+enum {
+	MOUSE_LEFT_BUTTON = 0,
+	MOUSE_MIDDLE_BUTTON = 1,
+	MOUSE_RIGHT_BUTTON = 2,
+	MOUSE_SCROLL_UP = 3,
+	MOUSE_SCROLL_DOWN = 4
+};
+
 void mousePassiveMotion(int x, int y);
+void mouseButtons(int button, int state, int x, int y);
 void keyPressed(unsigned char key, int x, int y);
 void keyUp(unsigned char key, int x, int y);
 void keysOperations();
@@ -31,8 +41,12 @@ double speed(0.0), verticalSpeed(0.0), accelerationValue(0.0), frictionValue(0.3
 std::chrono::system_clock::time_point prevTime;
 const double smallG(9.80665);
 int camAngleY(0), camAngleX(0);
+Camera camera(0, 0, 0);
 
 int main(int argc, char* argv[]) {
+	camera.linkTo(body);
+	camera.setDistance(10.0);
+	camera.setViewType(Camera::ViewType::FIRST_P);
 	gun.rotationAngle.setX(90.0);
 	bool f(true);
 	for(size_t i(0); i < 50; ++i) {
@@ -52,6 +66,8 @@ int main(int argc, char* argv[]) {
 	glutSpecialUpFunc(&specialKeyUp);
 	glutDisplayFunc(&display);
 	glutReshapeFunc(&reshape);
+	glutPassiveMotionFunc(&mousePassiveMotion);
+	glutMouseFunc(&mouseButtons);
 	glutTimerFunc(40, &mainTimer, 0);
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_DEPTH_TEST);
@@ -83,43 +99,62 @@ void keysOperations() {
 		body.rotate(0, 0, 0);
 	}
 	if(specialKeyStates[GLUT_KEY_UP])
-		camAngleX-=5;
+		camera.rotationAngle.setXr(-5);
 	else if(specialKeyStates[GLUT_KEY_DOWN])
-		camAngleX+=5;
+		camera.rotationAngle.setXr(5);
 	if(specialKeyStates[GLUT_KEY_LEFT])
-		camAngleY-=5;
+		camera.rotationAngle.setYr(-5);
 	else if(specialKeyStates[GLUT_KEY_RIGHT])
-		camAngleY+=5;
+		camera.rotationAngle.setYr(5);
 }
 void specialKeyPressed(int key, int x, int y) {
 	specialKeyStates[key] = true;
+	if(key == GLUT_KEY_SHIFT_L)
+		camera.setViewType(camera.getViewType() == Camera::ViewType::FIRST_P ? Camera::ViewType::THIRD_P : Camera::ViewType::FIRST_P);
 	/*switch(key) {
 		case GLUT_KEY_UP:
-			--camAngleX;
-			//do something here
-			break;
+		--camAngleX;
+		//do something here
+		break;
 		case GLUT_KEY_DOWN:
-			//do something here
-			++camAngleY;
-			break;
+		//do something here
+		++camAngleY;
+		break;
 		case GLUT_KEY_LEFT:
-			--camAngleY;
-			break;
+		--camAngleY;
+		break;
 		case GLUT_KEY_RIGHT:
-			++camAngleY;
-			break;
-	}*/
+		++camAngleY;
+		break;
+		}*/
 }
 void specialKeyUp(int key, int x, int y) {
 	specialKeyStates[key] = false;
 }
+void mousePassiveMotion(int x, int y) {
 
+}
+void mouseButtons(int button, int state, int x, int y) {
+	switch(button) {
+		case MOUSE_SCROLL_UP:
+			if(camera.getDistance() == 1)
+				camera.setViewType(Camera::ViewType::FIRST_P);
+			camera.setDistanceRelative(-1);
+			break;
+		case MOUSE_SCROLL_DOWN:
+			if(camera.getDistance() == 0)
+				camera.setViewType(Camera::ViewType::THIRD_P);
+			camera.setDistanceRelative(1);
+			break;
+		default:
+			break;
+	}
+}
 void reshape(int width, int height) {
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	gluPerspective(60.0, width / (double)height, 0.1, 120.0);
 	//glFrustum()
-	//gluLookAt(0, 0, -5, 0, 0, 0, 0, 100, 0);
 	glMatrixMode(GL_MODELVIEW);
 }
 
@@ -127,16 +162,16 @@ void physics(std::chrono::milliseconds &timestep) {
 	//std::cout << timestep.count() << std::endl;
 	/*if(acceleration) // Acceleration ON
 		speed += acceleration*accelerationValue;
-	if(speed) { // Add friction influence
+		if(speed) { // Add friction influence
 		double frictionInfluence(frictionValue * mass);
 		if(fabs(speed) <= frictionInfluence)
-			speed = 0.0;
+		speed = 0.0;
 		else {
-			speed += speed > 0.0 ? -frictionInfluence : frictionInfluence;
-			// Limit speed
+		speed += speed > 0.0 ? -frictionInfluence : frictionInfluence;
+		// Limit speed
 
 		}
-	}*/
+		}*/
 	//std::cout << body.y << std::endl;
 	double timestepSeconds = timestep.count() / 1000.0,
 		sinA(sin(body.rotationAngle.getY() * M_PI / 180.0)),
@@ -144,7 +179,7 @@ void physics(std::chrono::milliseconds &timestep) {
 		dZ(timestepSeconds * (speed + timestepSeconds * accelerationValue / 2)*cosA),
 		dX(timestepSeconds * (speed + timestepSeconds * accelerationValue / 2)*sinA),
 		dY(timestepSeconds * (verticalSpeed + timestepSeconds * smallG / 2));
-	body.shiftBy(dX, 0.0, dZ);
+	body.shiftBy(dX, 0, dZ);
 
 	verticalSpeed += timestepSeconds * smallG;
 
@@ -194,14 +229,7 @@ void display() {
 
 	// Reset transformations
 	glLoadIdentity();
-	// Driver camera
-	//glRotated(180.0 - body.rotationAngle.getY(), 0.0, 1.0, 0.0);
-	glRotated(camAngleX, 1.0, 0.0, 0.0);
-	glRotated(camAngleY+180.0, 0.0, 1.0, 0.0);
-	glTranslated(-body.x, -body.y - 1.0, -body.z);
-	// Static camera
-	//glTranslated(0.0, -5.0, -15.0);
-	//glRotated(35.0, 1.0, 0.0, 0.0);
+	camera.setCamera();
 
 	glColor3d(0.62, 0.85, 0.43);
 	// Draw surface
@@ -219,7 +247,7 @@ void display() {
 	body.draw();
 	tower.draw();
 	gun.draw();
-	
+
 	glFlush();
 	glutSwapBuffers();
 }

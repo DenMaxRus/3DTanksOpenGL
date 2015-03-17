@@ -60,6 +60,12 @@
     <ClCompile Include="OperatableObject.cpp">
       <Filter>Файлы исходного кода\BaseObjects</Filter>
     </ClCompile>
+    <ClCompile Include="Point.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Файлы исходного кода</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SolidColor.h">
@@ -94,6 +100,12 @@
     </ClInclude>
     <ClInclude Include="OperatableObject.h">
       <Filter>Заголовочные файлы\BaseObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Point.h">
+      <Filter>Заголовочные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Заголовочные файлы</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

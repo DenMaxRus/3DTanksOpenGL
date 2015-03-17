@@ -1,29 +1,6 @@
 #include "WorldObject.h"
 
-WorldObject::RotationAngle::RotationAngle() : xAngle(0.0), yAngle(0.0), zAngle(0.0) {}
-// Get rotation angles
-const double& WorldObject::RotationAngle::getX() const { return xAngle; }
-const double& WorldObject::RotationAngle::getY() const { return yAngle; }
-const double& WorldObject::RotationAngle::getZ() const { return zAngle; }
-// Set absolute rotation angles
-void WorldObject::RotationAngle::setX(double value) { xAngle = getNormalAngle(value); }
-void WorldObject::RotationAngle::setY(double value) { yAngle = getNormalAngle(value); }
-void WorldObject::RotationAngle::setZ(double value) { zAngle = getNormalAngle(value); }
-// Set relative rotation angles
-void WorldObject::RotationAngle::setXr(double value) { xAngle = getNormalAngle(xAngle += value); }
-void WorldObject::RotationAngle::setYr(double value) { yAngle = getNormalAngle(yAngle += value); }
-void WorldObject::RotationAngle::setZr(double value) { zAngle = getNormalAngle(zAngle += value); }
-
-double& WorldObject::RotationAngle::getNormalAngle(double &value) const {
-	if(value >= 360.0)
-		return value -= 360.0;
-	else if(value < 0.0)
-		return value += 360.0;
-	else
-		return value;
-}
-
-WorldObject::WorldObject(double width, double length, double height, double x, double y, double z) : x(x), y(y), z(z), width(width), length(length), height(height), halfWidth(width/2.0), halfLength(length/2.0), halfHeight(height/2.0), rotationAngle() {}
+WorldObject::WorldObject(double width, double length, double height, double x, double y, double z) : Point(x, y, z), width(width), length(length), height(height), halfWidth(width/2.0), halfLength(length/2.0), halfHeight(height/2.0) {}
 WorldObject::~WorldObject() {}
 // Get sizes
 const double& WorldObject::getWidth() const { return width; }
@@ -55,28 +32,3 @@ void WorldObject::setHeight(double value) {
 const double& WorldObject::getHWidth() const { return halfWidth; }
 const double& WorldObject::getHLength() const { return halfLength; }
 const double& WorldObject::getHHeight() const { return halfHeight; }
-// Transformations
-// Simplify rotation by setting rotationAngle x, y, z values
-void WorldObject::rotate(double x, double y, double z) {
-	rotationAngle.setX(x);
-	rotationAngle.setY(y);
-	rotationAngle.setZ(z);
-}
-// Change rotationAngle x, y, z values by relative values
-void WorldObject::rotateRelative(double xAngleDelta, double yAngleDelta, double zAngleDelta) {
-	rotationAngle.setXr(xAngleDelta);
-	rotationAngle.setYr(yAngleDelta);
-	rotationAngle.setZr(zAngleDelta);
-}
-// Change center coordinates
-void WorldObject::moveTo(double x, double y, double z) {
-	this->x = x;
-	this->y = y;
-	this->z = z;
-}
-// Change center coordinates by relative values
-void WorldObject::shiftBy(double xDelta, double yDelta, double zDelta) {
-	x += xDelta;
-	y += yDelta;
-	z += zDelta;
-}
